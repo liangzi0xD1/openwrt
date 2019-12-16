@@ -216,6 +216,9 @@ jobs:
           CONFIG_PACKAGE_luci-i18n-omcproxy-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-opkg-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-udpxy-zh-cn=y
+          CONFIG_PACKAGE_shadowsocksr-libev-alt=y
+          CONFIG_PACKAGE_shadowsocksr-libev-server=y
+          CONFIG_PACKAGE_shadowsocksr-libev-ssr-local=y
           EOF
           
           #luci kms
