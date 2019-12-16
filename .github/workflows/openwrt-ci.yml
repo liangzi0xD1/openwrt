@@ -209,6 +209,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-udpxy=y
           CONFIG_PACKAGE_luci-app-unblockmusic=y
           CONFIG_PACKAGE_luci-lib-ip=y
+          CONFIG_PACKAGE_luci-lib-ipkg=y
           CONFIG_PACKAGE_luci-lib-jsonc=y
           CONFIG_PACKAGE_luci-lib-nixio=y
           CONFIG_PACKAGE_luci-lib-nixio_notls=y 
