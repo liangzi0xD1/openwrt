@@ -47,6 +47,18 @@ define Device/ubnt-bz
   UBNT_VERSION := 6.0.0
 endef
 
+define Device/ubnt-sw
+  $(Device/ubnt)
+  SOC := ar7242
+  DEVICE_PACKAGES += kmod-usb-ohci
+  IMAGE_SIZE := 7552k
+  UBNT_BOARD := SW
+  UBNT_CHIP := ar7240
+  UBNT_TYPE := SW
+  UBNT_VERSION := 1.4.1
+  KERNEL := kernel-bin | append-dtb | relocate-kernel | lzma | uImage lzma
+endef
+
 define Device/ubnt-wa
   $(Device/ubnt)
   SOC := ar9342
@@ -116,6 +128,19 @@ define Device/ubnt_bullet-m-xw
   SUPPORTED_DEVICES += bullet-m-xw
 endef
 TARGET_DEVICES += ubnt_bullet-m-xw
+
+define Device/ubnt_edgeswitch-5xp
+  $(Device/ubnt-sw)
+  DEVICE_MODEL := EdgeSwitch 5XP
+endef
+TARGET_DEVICES += ubnt_edgeswitch-5xp
+
+define Device/ubnt_edgeswitch-8xp
+  $(Device/ubnt-sw)
+  DEVICE_MODEL := EdgeSwitch 8XP
+  DEVICE_PACKAGES += switch-bcm53xx-mdio
+endef
+TARGET_DEVICES += ubnt_edgeswitch-8xp
 
 define Device/ubnt_lap-120
   $(Device/ubnt-wa)
@@ -243,14 +268,14 @@ TARGET_DEVICES += ubnt_unifiac-lr
 define Device/ubnt_unifiac-mesh
   $(Device/ubnt_unifiac)
   DEVICE_MODEL := UniFi AC-Mesh
-  SUPPORTED_DEVICES += ubnt-unifiac-mesh
+  SUPPORTED_DEVICES += unifiac-lite
 endef
 TARGET_DEVICES += ubnt_unifiac-mesh
 
 define Device/ubnt_unifiac-mesh-pro
   $(Device/ubnt_unifiac)
   DEVICE_MODEL := UniFi AC-Mesh Pro
-  SUPPORTED_DEVICES += ubnt-unifiac-mesh-pro
+  SUPPORTED_DEVICES += unifiac-pro
 endef
 TARGET_DEVICES += ubnt_unifiac-mesh-pro
 
@@ -258,6 +283,6 @@ define Device/ubnt_unifiac-pro
   $(Device/ubnt_unifiac)
   DEVICE_MODEL := UniFi AC-Pro
   DEVICE_PACKAGES += kmod-usb2
-  SUPPORTED_DEVICES += ubnt-unifiac-pro
+  SUPPORTED_DEVICES += unifiac-pro
 endef
 TARGET_DEVICES += ubnt_unifiac-pro
