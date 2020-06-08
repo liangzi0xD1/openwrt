@@ -84,7 +84,7 @@ endef
 $(eval $(call KernelPackage,ath3k))
 
 
-define KernelPackage/bluetooth_6lowpan
+define KernelPackage/bluetooth-6lowpan
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Bluetooth 6LoWPAN support
   DEPENDS:=+kmod-6lowpan +kmod-bluetooth
@@ -93,11 +93,11 @@ define KernelPackage/bluetooth_6lowpan
   AUTOLOAD:=$(call AutoProbe,bluetooth_6lowpan)
 endef
 
-define KernelPackage/bluetooth_6lowpan/description
+define KernelPackage/bluetooth-6lowpan/description
  Kernel support for 6LoWPAN over Bluetooth Low Energy devices
 endef
 
-$(eval $(call KernelPackage,bluetooth_6lowpan))
+$(eval $(call KernelPackage,bluetooth-6lowpan))
 
 
 define KernelPackage/btmrvl
@@ -139,6 +139,7 @@ $(eval $(call KernelPackage,dma-buf))
 define KernelPackage/nvmem
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Non Volatile Memory support
+  DEPENDS:=@!LINUX_5_4
   KCONFIG:=CONFIG_NVMEM
   HIDDEN:=1
   FILES:=$(LINUX_DIR)/drivers/nvmem/nvmem_core.ko
@@ -169,7 +170,7 @@ define KernelPackage/eeprom-at24
   SUBMENU:=$(OTHER_MENU)
   TITLE:=EEPROM AT24 support
   KCONFIG:=CONFIG_EEPROM_AT24
-  DEPENDS:=+kmod-i2c-core +kmod-nvmem +!LINUX_4_14:kmod-regmap-i2c
+  DEPENDS:=+kmod-i2c-core +!LINUX_5_4:kmod-nvmem +!LINUX_4_14:kmod-regmap-i2c
   FILES:=$(LINUX_DIR)/drivers/misc/eeprom/at24.ko
   AUTOLOAD:=$(call AutoProbe,at24)
 endef
@@ -185,7 +186,7 @@ define KernelPackage/eeprom-at25
   SUBMENU:=$(OTHER_MENU)
   TITLE:=EEPROM AT25 support
   KCONFIG:=CONFIG_EEPROM_AT25
-  DEPENDS:=+kmod-nvmem
+  DEPENDS:=+!LINUX_5_4:kmod-nvmem
   FILES:=$(LINUX_DIR)/drivers/misc/eeprom/at25.ko
   AUTOLOAD:=$(call AutoProbe,at25)
 endef
@@ -211,6 +212,22 @@ define KernelPackage/gpio-dev/description
 endef
 
 $(eval $(call KernelPackage,gpio-dev))
+
+
+define KernelPackage/gpio-f7188x
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Fintek F718xx/F818xx GPIO Support
+  DEPENDS:=@GPIO_SUPPORT @TARGET_x86
+  KCONFIG:=CONFIG_GPIO_F7188X
+  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-f7188x.ko
+  AUTOLOAD:=$(call AutoProbe,gpio-f7188x)
+endef
+
+define KernelPackage/gpio-f7188x/description
+  Kernel module for the GPIOs found on many Fintek Super-IO chips.
+endef
+
+$(eval $(call KernelPackage,gpio-f7188x))
 
 
 define KernelPackage/gpio-mcp23s08
@@ -248,7 +265,7 @@ $(eval $(call KernelPackage,gpio-nxp-74hc164))
 
 define KernelPackage/gpio-pca953x
   SUBMENU:=$(OTHER_MENU)
-  DEPENDS:=@GPIO_SUPPORT +kmod-i2c-core
+  DEPENDS:=@GPIO_SUPPORT +kmod-i2c-core +LINUX_5_4:kmod-regmap-i2c
   TITLE:=PCA95xx, TCA64xx, and MAX7310 I/O ports
   KCONFIG:=CONFIG_GPIO_PCA953X
   FILES:=$(LINUX_DIR)/drivers/gpio/gpio-pca953x.ko
@@ -276,6 +293,24 @@ define KernelPackage/gpio-pcf857x/description
 endef
 
 $(eval $(call KernelPackage,gpio-pcf857x))
+
+
+define KernelPackage/gpio-it87
+  SUBMENU:=$(OTHER_MENU)
+  DEPENDS:=@GPIO_SUPPORT @TARGET_x86
+  TITLE:=GPIO support for IT87xx Super I/O chips
+  KCONFIG:=CONFIG_GPIO_IT87
+  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-it87.ko
+  AUTOLOAD:=$(call AutoLoad,25,gpio-it87,1)
+endef
+
+define KernelPackage/gpio-it87/description
+  This driver is tested with ITE IT8728 and IT8732 Super I/O chips, and
+  supports the IT8761E, IT8613, IT8620E, and IT8628E Super I/O chips as
+  well.
+endef
+
+$(eval $(call KernelPackage,gpio-it87))
 
 
 define KernelPackage/ppdev
@@ -418,7 +453,7 @@ $(eval $(call KernelPackage,softdog))
 define KernelPackage/ssb
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Silicon Sonics Backplane glue code
-  DEPENDS:=@PCI_SUPPORT @!TARGET_brcm47xx @!TARGET_brcm63xx
+  DEPENDS:=@PCI_SUPPORT @!TARGET_bcm47xx @!TARGET_bcm63xx
   KCONFIG:=\
 	CONFIG_SSB \
 	CONFIG_SSB_B43_PCI_BRIDGE=y \
@@ -444,7 +479,7 @@ $(eval $(call KernelPackage,ssb))
 define KernelPackage/bcma
   SUBMENU:=$(OTHER_MENU)
   TITLE:=BCMA support
-  DEPENDS:=@PCI_SUPPORT @!TARGET_brcm47xx @!TARGET_bcm53xx
+  DEPENDS:=@PCI_SUPPORT @!TARGET_bcm47xx @!TARGET_bcm53xx
   KCONFIG:=\
 	CONFIG_BCMA \
 	CONFIG_BCMA_POSSIBLE=y \
@@ -582,6 +617,7 @@ define KernelPackage/rtc-pcf2123
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Philips PCF2123 RTC support
   DEFAULT:=m if ALL_KMODS && RTC_SUPPORT
+  DEPENDS:=+LINUX_5_4:kmod-regmap-spi
   KCONFIG:=CONFIG_RTC_DRV_PCF2123 \
 	CONFIG_RTC_CLASS=y
   FILES:=$(LINUX_DIR)/drivers/rtc/rtc-pcf2123.ko
@@ -730,7 +766,8 @@ define KernelPackage/serial-8250
   FILES:= \
 	$(LINUX_DIR)/drivers/tty/serial/8250/8250.ko \
 	$(LINUX_DIR)/drivers/tty/serial/8250/8250_base.ko \
-	$(if $(CONFIG_PCI),$(LINUX_DIR)/drivers/tty/serial/8250/8250_pci.ko)
+	$(if $(CONFIG_PCI),$(LINUX_DIR)/drivers/tty/serial/8250/8250_pci.ko) \
+	$(if $(CONFIG_GPIOLIB),$(LINUX_DIR)/drivers/tty/serial/serial_mctrl_gpio.ko@ge5.3)
   AUTOLOAD:=$(call AutoProbe,8250 8250_base 8250_pci)
 endef
 
@@ -956,8 +993,8 @@ define KernelPackage/ptp-qoriq
   TITLE:=Freescale QorIQ PTP support
   DEPENDS:=@TARGET_mpc85xx +kmod-ptp @!LINUX_4_14
   KCONFIG:=CONFIG_PTP_1588_CLOCK_QORIQ
-  FILES:=$(LINUX_DIR)/drivers/ptp/ptp_qoriq.o
-  AUTOLOAD:=$(call AutoProbe,ptp_qoriq)
+  FILES:=$(LINUX_DIR)/drivers/ptp/ptp-qoriq.ko
+  AUTOLOAD:=$(call AutoProbe,ptp-qoriq)
 endef
 
 
@@ -1225,3 +1262,19 @@ define KernelPackage/it87-wdt/description
 endef
 
 $(eval $(call KernelPackage,it87-wdt))
+
+
+define KernelPackage/f71808e-wdt
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Fintek F718xx/F818xx Watchdog Timer
+  DEPENDS:=@TARGET_x86
+  KCONFIG:=CONFIG_F71808E_WDT
+  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/f71808e_wdt.ko
+  AUTOLOAD:=$(call AutoProbe,f71808e-wdt,1)
+endef
+
+define KernelPackage/f71808e-wdt/description
+  Kernel module for the watchdog timer found on many Fintek Super-IO chips.
+endef
+
+$(eval $(call KernelPackage,f71808e-wdt))

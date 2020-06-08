@@ -31,7 +31,6 @@ endef
 define Device/cisco_on100
   DEVICE_VENDOR := Cisco Systems
   DEVICE_MODEL := ON100
-  DEVICE_PACKAGES := kmod-i2c-mv64xxx
   KERNEL_SIZE := 5376k
   KERNEL_IN_UBI :=
   UBINIZE_OPTS := -E 5
@@ -62,42 +61,43 @@ define Device/iom_iconnect-1.1
 endef
 TARGET_DEVICES += iom_iconnect-1.1
 
-define Device/iom_ix2_200
+define Device/iom_ix2-200
   DEVICE_VENDOR := Iomega
   DEVICE_MODEL := StorCenter ix2-200
   DEVICE_DTS := kirkwood-iomega_ix2_200
-  DEVICE_PACKAGES += kmod-gpio-button-hotplug kmod-i2c-mv64xxx kmod-hwmon-lm63
-  DEVICE_TYPE:=nas
+  DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-hwmon-lm63
   PAGESIZE := 512
   SUBPAGESIZE := 256
-  BLOCKSIZE := 16KiB
+  BLOCKSIZE := 16k
   KERNEL_SIZE := 3072k
   KERNEL_IN_UBI :=
   UBINIZE_OPTS := -E 5
-  IMAGE_SIZE := 32505856
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE_SIZE := 31744k
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | \
+	check-size
 endef
-TARGET_DEVICES += iom_ix2_200
+TARGET_DEVICES += iom_ix2-200
 
 define Device/linksys_audi
   DEVICE_VENDOR := Linksys
   DEVICE_MODEL := EA3500 (Audi)
-  DEVICE_PACKAGES := kmod-mwl8k swconfig wpad-basic kmod-gpio-button-hotplug
+  DEVICE_PACKAGES := kmod-mwl8k wpad-basic kmod-gpio-button-hotplug
   PAGESIZE := 512
   SUBPAGESIZE := 256
-  BLOCKSIZE := 16KiB
+  BLOCKSIZE := 16k
   KERNEL_SIZE := 2624k
   KERNEL_IN_UBI :=
   UBINIZE_OPTS := -E 5
   IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi
   BOARD_NAME := linksys-audi
+  DEFAULT := n
 endef
 TARGET_DEVICES += linksys_audi
 
 define Device/linksys_viper
   DEVICE_VENDOR := Linksys
   DEVICE_MODEL := E4200v2 / EA4500 (Viper)
-  DEVICE_PACKAGES := kmod-mwl8k swconfig wpad-basic kmod-gpio-button-hotplug
+  DEVICE_PACKAGES := kmod-mwl8k wpad-basic kmod-gpio-button-hotplug
   KERNEL_SIZE := 2688k
   KERNEL_IN_UBI :=
   UBINIZE_OPTS := -E 5
