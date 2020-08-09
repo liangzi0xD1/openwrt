@@ -767,6 +767,7 @@ endef
 TARGET_DEVICES += nixcore_x1-8m
 
 define Device/olimex_rt5350f-olinuxino
+  $(Device/uimage-lzma-loader)
   SOC := rt5350
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := OLIMEX
@@ -777,6 +778,7 @@ endef
 TARGET_DEVICES += olimex_rt5350f-olinuxino
 
 define Device/olimex_rt5350f-olinuxino-evb
+  $(Device/uimage-lzma-loader)
   SOC := rt5350
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := OLIMEX
@@ -1192,6 +1194,15 @@ define Device/zyxel_keenetic
   SUPPORTED_DEVICES += kn
 endef
 TARGET_DEVICES += zyxel_keenetic
+
+define Device/zyxel_keenetic-lite-b
+  SOC := rt5350
+  IMAGE_SIZE := 7872k
+  DEVICE_VENDOR := ZyXEL
+  DEVICE_MODEL := Keenetic Lite
+  DEVICE_VARIANT := B
+endef
+TARGET_DEVICES += zyxel_keenetic-lite-b
 
 define Device/zyxel_keenetic-start
   SOC := rt5350

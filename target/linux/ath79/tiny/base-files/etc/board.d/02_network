@@ -35,12 +35,15 @@ ath79_setup_interfaces()
 	tplink,tl-wa701nd-v1|\
 	tplink,tl-wa730re-v1|\
 	tplink,tl-wa801nd-v1|\
+	tplink,tl-wa801nd-v3|\
+	tplink,tl-wa801nd-v4|\
 	tplink,tl-wa830re-v1|\
 	tplink,tl-wa850re-v1|\
 	tplink,tl-wa850re-v2|\
 	tplink,tl-wa860re-v1|\
 	tplink,tl-wa901nd-v1|\
 	tplink,tl-wa901nd-v2|\
+	tplink,tl-wa901nd-v3|\
 	tplink,tl-wa901nd-v4|\
 	tplink,tl-wa901nd-v5|\
 	tplink,tl-wr703n|\

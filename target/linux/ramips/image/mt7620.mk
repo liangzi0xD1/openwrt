@@ -400,8 +400,8 @@ define Device/fon_fon2601
   DEVICE_VENDOR := Fon
   DEVICE_MODEL := FON2601
   DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2 kmod-usb-ohci
-  KERNEL_INITRAMFS := $$(KERNEL) | fonfxcimage
-  IMAGE/sysupgrade.bin := append-kernel | append-rootfs | fonfxcimage | \
+  KERNEL_INITRAMFS := $$(KERNEL) | uimage-padhdr
+  IMAGE/sysupgrade.bin := append-kernel | append-rootfs | uimage-padhdr | \
 	pad-rootfs | append-metadata | check-size
 endef
 TARGET_DEVICES += fon_fon2601
@@ -695,6 +695,22 @@ define Device/netgear_ex6130
   DEVICE_MODEL := EX6130
 endef
 TARGET_DEVICES += netgear_ex6130
+
+define Device/netgear_jwnr2010-v5
+  $(Device/netgear_sercomm_nor)
+  SOC := mt7620n
+  BLOCKSIZE := 4k
+  IMAGE_SIZE := 3840k
+  DEVICE_MODEL := JWNR2010
+  DEVICE_VARIANT := v5
+  SERCOMM_HWNAME := N300
+  SERCOMM_HWID := ASW
+  SERCOMM_HWVER := A001
+  SERCOMM_SWVER := 0x0040
+  SERCOMM_PAD := 128k
+  DEFAULT := n
+endef
+TARGET_DEVICES += netgear_jwnr2010-v5
 
 define Device/netgear_wn3000rp-v3
   SOC := mt7620a
